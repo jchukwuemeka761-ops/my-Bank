@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-emerald-deep: #0B6B4F;
+  --color-emerald-dark: #084E3A;
+  --color-emerald-light: #128C68;
+  --color-gold-accent: #F2B632;
+  --color-gold-hover: #E5A820;
+  --color-surface-soft: #F4F7F5;
+  --color-surface-card: #FFFFFF;
+  --color-surface-border: #E2E8E4;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+:root {
+  --jf-emerald: #0B6B4F;
+  --jf-emerald-dark: #084E3A;
+  --jf-gold: #F2B632;
+}
+
+html {
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(11, 107, 79, 0.2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(11, 107, 79, 0.4);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

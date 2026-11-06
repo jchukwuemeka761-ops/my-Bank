@@ -1,0 +1,6 @@
+{
+  "name": "JChukwuemeka's Financials",
+  "description": "Modern, accessible digital banking platform offering checking, savings, loans, cards, investments, and secure financial management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

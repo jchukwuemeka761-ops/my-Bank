@@ -1,0 +1,75 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.role == 'admin';
+    }
+
+    // Default deny all access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow update: if isOwner(userId)
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'failedLoginAttempts', 'lockedUntil', 'kycStatus']);
+      allow create: if isOwner(userId);
+    }
+
+    // Bank Accounts: Client can ONLY read; client NEVER writes or alters balances directly
+    match /accounts/{accountId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if false; // Balance mutations executed exclusively through Cloud Functions with double-entry ledger
+    }
+
+    // Ledger Entries: Immutable double-entry bookkeeping journal entries
+    match /ledger_entries/{entryId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if false; // Append-only by Cloud Functions
+    }
+
+    // Transactions: Read-only for account owners and admins
+    match /transactions/{transactionId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+
+    // Cards: User can update non-critical state (e.g. travel notice), but freeze and PAN controls are server validated
+    match /cards/{cardId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['cardNumberMasked', 'cvvHash', 'accountId', 'userId']);
+    }
+
+    // KYC Applications: User creates their own; only admins can review or approve
+    match /kyc_applications/{appId} {
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow update: if isAdmin();
+    }
+
+    // Admin Audit Logs: Append-only, admin-read only
+    match /audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow write: if false; // Cloud Functions only
+    }
+
+    // System Rate Configurations: Publicly readable, admin mutable
+    match /system_config/rates {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

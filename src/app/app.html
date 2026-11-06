@@ -1,0 +1,24 @@
+<div class="min-h-screen flex flex-col bg-[#F4F7F5] dark:bg-[#0E1B16] text-slate-800 dark:text-slate-100 transition-colors duration-200">
+  <!-- Demonstration Environment Banner -->
+  <app-demo-banner></app-demo-banner>
+
+  <!-- Global Header with 8-Product Mega-Menu -->
+  <app-header></app-header>
+
+  <!-- Dynamic Page Content -->
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Global Compliant Footer -->
+  <app-footer></app-footer>
+
+  <!-- AI Assistant Chat Floating Widget -->
+  <app-ai-assistant-widget></app-ai-assistant-widget>
+
+  <!-- 10-Minute Security Inactivity Timeout Modal -->
+  <app-session-timeout-modal></app-session-timeout-modal>
+
+  <!-- Cookie & Essential Security Banner -->
+  <app-cookie-banner></app-cookie-banner>
+</div>

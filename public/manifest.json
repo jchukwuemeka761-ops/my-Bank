@@ -1,0 +1,16 @@
+{
+  "name": "JChukwuemeka's Financials",
+  "short_name": "JF Banking",
+  "description": "Modern, accessible digital banking platform with double-entry ledger security.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#084E3A",
+  "theme_color": "#0B6B4F",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
